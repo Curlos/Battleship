@@ -1,0 +1,19 @@
+.gameboards {
+  display: flex;
+  justify-content: space-around;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: 400px;
+  height: 400px;
+  margin: 20px;
+}
+
+.gameboard div {
+  border: 1px solid black;
+}
