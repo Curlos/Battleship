@@ -12,8 +12,20 @@
   width: 400px;
   height: 400px;
   margin: 20px;
+  background-color: #5775B0;
 }
 
-.gameboard div {
+.gameboard .position {
   border: 1px solid black;
+}
+
+.gameboard .position:hover {
+  cursor: crosshair;
+}
+.miss {
+  background-color: white;
+}
+
+.hit {
+  background-color: rgb(255, 57, 57);
 }
