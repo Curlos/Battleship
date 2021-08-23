@@ -64,7 +64,7 @@ const placeShipX = (shipLen, elem) => {
       hoveredElems.push(elem)
       elem.style.backgroundColor = 'white'
     }
-    
+
   }
 }
 
