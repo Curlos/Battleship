@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch ./src/tests/*.js",
-    "webpack-dev-server": "webpack-dev-server",
-    "dev": "webpack-dev-server --mode=development",
-    "prod": "webpack --mode=production"
+    "watch": "jest --watch ./src/tests/*.js"
   },
   "repository": {
     "type": "git",

@@ -18,7 +18,7 @@ export class Gameboard {
   }
 
   placeShip(ship) {
-    placedShips.push(ship)
+    this.placedShips.push(ship)
   }
 
   receiveAttack(coords) {

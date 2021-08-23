@@ -1,9 +1,11 @@
 class Ship {
   length;
+  axis;
   positions = [];
 
-  constructor(length) {
+  constructor(length, axis) {
     this.length = length
+    this.axis = axis
     this.positionsHit = []
   }
 
@@ -11,12 +13,8 @@ class Ship {
     return this.length
   }
 
-  setPositions(positions) {
-    if(positions.length === this.length) {
-      this.positions = positions
-    } else {
-      return 'Ship cannot fit!'
-    }
+  getAxis() {
+    return this.axis
   }
 
   getPositions() {
@@ -27,8 +25,25 @@ class Ship {
     return this.positions.filter((position) => position.hit != true)
   }
 
+  getFirstPosition() {
+    return this.positions[0][0]
+  }
+
+  getLastPosition() {
+    return this.positions[this.positions.length - 1][0]
+  }
+
+  setPositions(positions) {
+    if(positions.length === this.length) {
+      this.positions = positions
+    } else {
+      return 'Ship cannot fit!'
+    }
+  }
+
   hit(positionNum) {
-    this.positions.find(position => position.x === positionNum[0] && position.y === position[1])
+    const position = this.positions.find(position => position.x === positionNum[0] && position.y === position[1])
+    position.hit = true
   }
 
   isSunk() {
