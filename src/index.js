@@ -1,13 +1,14 @@
 import { Ship } from './classes/Ship'
 import { Gameboard } from './classes/Gameboard'
 import { Player } from './classes/Player'
+import validShipPlacement from './gameHelpers/validShipPlacement'
 
 const gameStarted = false
 const playerOne = new Player('Carlos', 'playerOne')
 const playerTwo = new Player('Anthony', 'playerTwo')
 const axis = 'X'
 const shipLengths = [5, 4, 3, 3, 2]
-let currentPlayerTurn = playerOne.playerLabel
+let currentPlayerTurn = playerOne
 let currShipLengthIndex = 0
 let hoveredElems = []
 
@@ -21,9 +22,6 @@ const attackPosition = (event) => {
   console.log(x, y)
 }
 
-const validShipPlacement = () => {
-
-}
 
 const clearElemColors = () => {
   hoveredElems.forEach((elem) => elem.style.backgroundColor = '#5775B0')
@@ -82,27 +80,33 @@ const placeShipY = (shipLen, pos) => {
 }
 
 const finalizeShipPlacement = () => {
-  if (validShipPlacement) {
-    const shipLen = hoveredElems.length
-    const ship = new Ship(shipLen)
-    const shipPositions = []
+  const shipLen = hoveredElems.length
+  const ship = new Ship(shipLen, axis)
+  const shipPositions = []
 
-    hoveredElems.forEach((elem) => {
-      const x = Number(elem.getAttribute('x'))
-      const y = Number(elem.getAttribute('y'))
-      shipPositions.push([{x, y, hit: false}])
-    })
+  hoveredElems.forEach((elem) => {
+    const x = Number(elem.getAttribute('x'))
+    const y = Number(elem.getAttribute('y'))
+    shipPositions.push([{x, y, hit: false}])
+  })
 
-    ship.setPositions(shipPositions)
+  console.log(hoveredElems)
+
+  ship.setPositions(shipPositions)
+
+
+  console.log(ship)
+  console.log(`VALID SHIP? ${validShipPlacement(currentPlayerTurn, ship)}`)
+
+  if (validShipPlacement(currentPlayerTurn, ship)) {
+    
     playerOne.getGameboard().placeShip(ship)
 
-    console.log(ship)
-    console.log(ship.getPositionsHit())
     hoveredElems = []
     currShipLengthIndex += 1
   }
 
-  console.log(gameboardOne)
+  console.log(playerOne.getGameboard())
 }
 
 const displayGameboard = (player) => {
