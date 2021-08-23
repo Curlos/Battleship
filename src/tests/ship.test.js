@@ -38,7 +38,12 @@ describe('Ship hit', () => {
     const positionNums = [[0,1], [0,2], [0,3], [0,4]]
     
     positionNums.forEach((positionNum) => ship.hit(positionNum))
-    expect(ship.getPositionsHit()).toStrictEqual([[0,1], [0,2], [0,3], [0,4]])
+    expect(ship.getPositionsHit()).toStrictEqual([
+      {x: 0, y: 1, hit: false},
+      {x: 0, y: 2, hit: false},
+      {x: 0, y: 3, hit: false},
+      {x: 0, y: 4, hit: false},
+    ])
     expect(ship.getPositionsHit().length).toBe(4)
     expect(ship.isSunk()).toBe(false)
   })

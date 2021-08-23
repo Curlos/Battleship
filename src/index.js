@@ -3,9 +3,12 @@ import { Gameboard } from './classes/Gameboard'
 import { Player } from './classes/Player'
 
 const gameStarted = false
+const playerOne = new Player('Carlos', 'playerOne')
+const playerTwo = new Player('Anthony', 'playerTwo')
 const axis = 'X'
 const shipLengths = [5, 4, 3, 3, 2]
-const currShipLengthIndex = 0
+let currentPlayerTurn = playerOne.playerLabel
+let currShipLengthIndex = 0
 let hoveredElems = []
 
 const attackPosition = (event) => {
@@ -36,19 +39,36 @@ const handleHoverPosition = (event) => {
 }
 
 const placeShip = (pos, axis) => {
-  const ship = new Ship(shipLengths[currShipLengthIndex])
+  const shipLen = shipLengths[currShipLengthIndex]
 
   if (axis === 'X') {
-    placeShipX(ship, pos)
+    placeShipX(shipLen, pos)
   } else if (axis === 'Y') {
-    placeShipY(ship, pos)
+    placeShipY(shipLen, pos)
   }
 }
 
-const placeShipX = (ship, pos) => {
+const placeShipX = (shipLen, pos) => {
   const [x, y] = [Number(pos.getAttribute('x')), Number(pos.getAttribute('y'))]
-  const shipLen = ship.getLength()
+  const finalShipPositionX = (x + shipLen) - 1
+
+  if (finalShipPositionX <= 9) {
+    console.log(x, y)
+
+    for(let i = x; i <= finalShipPositionX; i++) {
+      const elem = document.querySelectorAll(`[x="${i}"][y="${y}"]`)[0]
+      hoveredElems.push(elem)
+      elem.style.backgroundColor = 'white'
+    }
+  }
+}
+
+const placeShipY = (shipLen, pos) => {
+  const [x, y] = [Number(pos.getAttribute('x')), Number(pos.getAttribute('y'))]
+  const shipPositions = []
   const finalShipPositionY = (y + shipLen) - 1
+
+  console.log(hoveredElems)
 
   if (finalShipPositionY <= 9) {
     console.log(x, y)
@@ -61,15 +81,28 @@ const placeShipX = (ship, pos) => {
   }
 }
 
-const placeShipY = (pos) => {
-  const [x, y] = [Number(pos.getAttribute('x')), Number(pos.getAttribute('y'))]
-  console.log(x, y)
-}
-
 const finalizeShipPlacement = () => {
   if (validShipPlacement) {
-    currShipLengthIndex -= 1
+    const shipLen = hoveredElems.length
+    const ship = new Ship(shipLen)
+    const shipPositions = []
+
+    hoveredElems.forEach((elem) => {
+      const x = Number(elem.getAttribute('x'))
+      const y = Number(elem.getAttribute('y'))
+      shipPositions.push([{x, y, hit: false}])
+    })
+
+    ship.setPositions(shipPositions)
+    playerOne.getGameboard().placeShip(ship)
+
+    console.log(ship)
+    console.log(ship.getPositionsHit())
+    hoveredElems = []
+    currShipLengthIndex += 1
   }
+
+  console.log(gameboardOne)
 }
 
 const displayGameboard = (player) => {
@@ -77,9 +110,9 @@ const displayGameboard = (player) => {
   const gameboard = document.createElement('div')
   gameboard.classList.add('gameboard', player)
   
-  for (let x = 0; x < 10; x++) {
+  for (let y = 0; y < 10; y++) {
     
-    for(let y = 0; y < 10; y++) {
+    for(let x = 0; x < 10; x++) {
       let positionElem = document.createElement('div')
       positionElem.setAttribute('x', x)
       positionElem.setAttribute('y', y)
@@ -98,8 +131,8 @@ const displayGameboard = (player) => {
   gameboards.append(gameboard)
 }
 
-displayGameboard('playerOne')
-displayGameboard('playerTwo')
+displayGameboard(playerOne.playerLabel)
+displayGameboard(playerTwo.playerLabel)
 
 const elem = document.querySelectorAll(`[x="1"]`)
 console.log(elem)

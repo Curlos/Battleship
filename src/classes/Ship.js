@@ -1,7 +1,6 @@
 class Ship {
   length;
-  positions;
-  positionsHit;
+  positions = [];
 
   constructor(length) {
     this.length = length
@@ -25,15 +24,16 @@ class Ship {
   }
 
   getPositionsHit() {
-    return this.positionsHit
+    return this.positions.filter((position) => position.hit != true)
   }
 
   hit(positionNum) {
-    this.positionsHit.push(positionNum)
+    this.positions.find(position => position.x === positionNum[0] && position.y === position[1])
   }
 
   isSunk() {
-    return this.positionsHit.length ===  this.length
+    const positionsLeft = this.positions.filter((position) => position.hit != true)
+    return positionsLeft === 0
   }
 }
 
