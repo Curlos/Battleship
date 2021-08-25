@@ -9,6 +9,8 @@ const playerOne = new Player('Carlos', 'playerOne')
 const playerTwo = new Player('Anthony', 'playerTwo')
 const axis = 'X'
 const shipLengths = [5, 4, 3, 3, 2]
+const autoPlaceButton = document.querySelector('.autoPlaceButton')
+const totalShips = 5
 
 let gameStarted = false
 let currentPlayerTurn = playerOne
@@ -27,10 +29,31 @@ const attackPosition = (event) => {
 }
 
 
-const clearElemColors = () => {
+const clearHoverElemColors = () => {
   hoveredElems.forEach((elem) => elem.style.backgroundColor = '#5775B0')
   hoveredElems = []
   hoveredPos = []
+}
+
+const clearAllElemColors = (player) => {
+  const allPos = document.querySelectorAll(`.${player} .position`)
+  allPos.forEach((elem) => elem.style.backgroundColor = '#5775B0')
+  hoveredElems = []
+  hoveredPos = []
+}
+
+
+
+const clearGameboard = (player) => {
+  if (player === 'playerOne') {
+    playerOne.getGameboard().clearGameboard()
+  } else if (player === 'playerTwo') {
+    playerTwo.getGameboard().clearGameboard()
+  }
+  console.log(playerOne.getGameboard().getPlacedShips())
+
+  gameStarted = false
+  clearAllElemColors(player)
 }
 
 const startGame = () => {
@@ -41,14 +64,14 @@ const startGame = () => {
   gameboards.classList.remove('centerGameboards')
   gameboard.classList.remove('placingShips')
   playerTwoGameboard.classList.remove('playerTwoGameNotStarted')
-  
+
   console.log('All of playerOnes ships have been placed.')
   gameStarted = true
 
 }
 
 const handleHoverPosition = (event) => {
-  clearElemColors()
+  clearHoverElemColors()
   if(gameStarted === false) {
     const elem = event.target
     placeShip(elem, axis)
@@ -111,6 +134,9 @@ const placeShipY = (shipLen, pos) => {
 
 const finalizeShipPlacement = () => {
 
+  console.log('placing ship')
+  console.log(gameStarted)
+
   if (gameStarted) {
     return
   }
@@ -137,6 +163,54 @@ const finalizeShipPlacement = () => {
   if(playerOne.getGameboard().getPlacedShips().length === 5) {
     startGame()
   }
+}
+
+const handleAutoPlaceClick = () => {
+  autoPlaceAllShips('playerOne')
+}
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+const autoPlaceAllShips = (player) => {
+  if (gameStarted) {
+    return
+  }
+
+  const gameboard = document.querySelector(`.${player}`)
+  clearGameboard(player)
+
+  if (player === playerOne.getPlayerLabel()) {
+    console.log('hello player one')
+
+    let numOfPlacedShips = playerOne.getGameboard().getPlacedShips().length
+
+    console.log(numOfPlacedShips)
+    let i = 0;
+
+    while (i < totalShips) {
+      const x = getRandomInt(0, 9)
+      const y = getRandomInt(0, 9)
+
+      const elem = document.querySelectorAll(`[x="${x}"][y="${y}"]`)[0]
+      placeShip(elem, axis)
+      elem.click()
+
+      console.log(numOfPlacedShips)
+      i += 1
+
+    }
+
+
+  } else if (player === playerTwo.getPlayerLabel()) {
+
+  }
+
+  console.log(gameboard)
 }
 
 const displayGameboard = (player) => {
@@ -175,5 +249,4 @@ const displayGameboard = (player) => {
 displayGameboard(playerOne.playerLabel)
 displayGameboard(playerTwo.playerLabel)
 
-const elem = document.querySelectorAll(`[x="1"]`)
-console.log(elem)
+autoPlaceButton.addEventListener('click', handleAutoPlaceClick)

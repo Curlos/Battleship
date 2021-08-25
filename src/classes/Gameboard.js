@@ -4,13 +4,7 @@ export class Gameboard {
 
   clearGameboard() {
     this.positions = []
-    for (let i = 0; i < 10; i++) {
-      let row = []
-      for(let i = 0; i < 10; i++) {
-        row.push(0)
-      }
-      positions.push(row)
-    }
+    this.placedShips = []
   }
 
   getPlacedShips() {
