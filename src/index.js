@@ -39,7 +39,7 @@ const clearHoverElemColors = () => {
 }
 
 const clearAllElemColors = (player) => {
-  const allPos = document.querySelectorAll(`.${player} .position`)
+  const allPos = document.querySelectorAll(`.${player.getPlayerLabel()} .position`)
   allPos.forEach((elem) => elem.style.backgroundColor = '#5775B0')
   hoveredElems = []
   hoveredPos = []
@@ -49,13 +49,7 @@ const clearAllElemColors = (player) => {
 
 
 const clearGameboard = (player) => {
-  if (player === 'playerOne') {
-    playerOne.getGameboard().clearGameboard()
-  } else if (player === 'playerTwo') {
-    playerTwo.getGameboard().clearGameboard()
-  }
-  console.log(playerOne.getGameboard().getPlacedShips())
-
+  player.getGameboard().clearGameboard()
   gameStarted = false
   clearAllElemColors(player)
 }
@@ -87,7 +81,7 @@ const handleHoverPosition = (event) => {
   }
 }
 
-const placeShip = (elem, axis) => {
+export const placeShip = (elem, axis) => {
 
   if (gameStarted) {
     return
@@ -173,14 +167,10 @@ const finalizeShipPlacement = () => {
 }
 
 const handleAutoPlaceClick = () => {
-  autoPlaceAllShips('playerOne')
+  clearGameboard(currentPlayerTurn)
+  autoPlaceAllShips(currentPlayerTurn, gameStarted, totalShips, axis)
 }
 
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 const displayGameboard = (player) => {
   const gameboards = document.querySelector('.gameboards')
