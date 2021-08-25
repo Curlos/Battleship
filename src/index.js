@@ -10,6 +10,7 @@ const playerTwo = new Player('Anthony', 'playerTwo')
 const axis = 'X'
 const shipLengths = [5, 4, 3, 3, 2]
 const autoPlaceButton = document.querySelector('.autoPlaceButton')
+const startGameButton = document.querySelector('.startGameButton')
 const totalShips = 5
 
 let gameStarted = false
@@ -40,6 +41,7 @@ const clearAllElemColors = (player) => {
   allPos.forEach((elem) => elem.style.backgroundColor = '#5775B0')
   hoveredElems = []
   hoveredPos = []
+  currShipLengthIndex = 0
 }
 
 
@@ -57,6 +59,11 @@ const clearGameboard = (player) => {
 }
 
 const startGame = () => {
+
+  if (playerOne.getGameboard().getPlacedShips().length < 5) {
+    return
+  }
+
   const gameboards = document.querySelector('.gameboards')
   const gameboard = document.querySelector('.gameboard')
   const playerTwoGameboard = document.querySelector('.playerTwo')
@@ -160,9 +167,7 @@ const finalizeShipPlacement = () => {
     currShipLengthIndex += 1
   }
 
-  if(playerOne.getGameboard().getPlacedShips().length === 5) {
-    startGame()
-  }
+  console.log(playerOne.getGameboard().getPlacedShips())
 }
 
 const handleAutoPlaceClick = () => {
@@ -189,10 +194,7 @@ const autoPlaceAllShips = (player) => {
 
     let numOfPlacedShips = playerOne.getGameboard().getPlacedShips().length
 
-    console.log(numOfPlacedShips)
-    let i = 0;
-
-    while (i < totalShips) {
+    while (numOfPlacedShips < totalShips) {
       const x = getRandomInt(0, 9)
       const y = getRandomInt(0, 9)
 
@@ -200,9 +202,7 @@ const autoPlaceAllShips = (player) => {
       placeShip(elem, axis)
       elem.click()
 
-      console.log(numOfPlacedShips)
-      i += 1
-
+      numOfPlacedShips = Object.values(playerOne.getGameboard().getPlacedShips()).length
     }
 
 
@@ -250,3 +250,4 @@ displayGameboard(playerOne.playerLabel)
 displayGameboard(playerTwo.playerLabel)
 
 autoPlaceButton.addEventListener('click', handleAutoPlaceClick)
+startGameButton.addEventListener('click', startGame)
