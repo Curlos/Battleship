@@ -4,11 +4,13 @@ import { Player } from './classes/Player'
 import validShipPlacement from './gameHelpers/validShipPlacement'
 import createShipWithPos from './gameHelpers/createShipWithPos'
 import validShipHover from './gameHelpers/validShipHover'
-const gameStarted = false
+
 const playerOne = new Player('Carlos', 'playerOne')
 const playerTwo = new Player('Anthony', 'playerTwo')
 const axis = 'X'
 const shipLengths = [5, 4, 3, 3, 2]
+
+let gameStarted = false
 let currentPlayerTurn = playerOne
 let currShipLengthIndex = 0
 let hoveredElems = []
@@ -31,6 +33,20 @@ const clearElemColors = () => {
   hoveredPos = []
 }
 
+const startGame = () => {
+  const gameboards = document.querySelector('.gameboards')
+  const gameboard = document.querySelector('.gameboard')
+  const playerTwoGameboard = document.querySelector('.playerTwo')
+
+  gameboards.classList.remove('centerGameboards')
+  gameboard.classList.remove('placingShips')
+  playerTwoGameboard.classList.remove('playerTwoGameNotStarted')
+  
+  console.log('All of playerOnes ships have been placed.')
+  gameStarted = true
+
+}
+
 const handleHoverPosition = (event) => {
   clearElemColors()
   if(gameStarted === false) {
@@ -40,11 +56,21 @@ const handleHoverPosition = (event) => {
 }
 
 const placeShip = (elem, axis) => {
+
+  if (gameStarted) {
+    return
+  }
+
   const shipLen = shipLengths[currShipLengthIndex]
 
   if (axis === 'X') {
     if (validShipHover(shipLen, elem, axis, currentPlayerTurn)) {
+      elem.classList.remove('invalidShipPlacement')
       placeShipX(shipLen, elem)
+    } else {
+      console.log('CHANGNG CURSOR')
+      console.log(elem)
+      elem.classList.add('invalidShipPlacement')
     }
   } else if (axis === 'Y') {
     if (validShipHover(shipLen, elem, axis, currentPlayerTurn)) {
@@ -70,7 +96,6 @@ const placeShipX = (shipLen, elem) => {
 
 const placeShipY = (shipLen, pos) => {
   const [x, y] = [Number(pos.getAttribute('x')), Number(pos.getAttribute('y'))]
-  const shipPositions = []
   const finalShipPositionY = (y + shipLen) - 1
 
   if (finalShipPositionY <= 9) {
@@ -85,6 +110,10 @@ const placeShipY = (shipLen, pos) => {
 }
 
 const finalizeShipPlacement = () => {
+
+  if (gameStarted) {
+    return
+  }
   const shipLen = hoveredElems.length
   const ship = new Ship(shipLen, axis)
   const shipPositions = []
@@ -105,13 +134,22 @@ const finalizeShipPlacement = () => {
     currShipLengthIndex += 1
   }
 
-  console.log(playerOne.getGameboard())
+  if(playerOne.getGameboard().getPlacedShips().length === 5) {
+    startGame()
+  }
 }
 
 const displayGameboard = (player) => {
   const gameboards = document.querySelector('.gameboards')
   const gameboard = document.createElement('div')
   gameboard.classList.add('gameboard', player)
+
+  if (player === 'playerOne') {
+    gameboards.classList.add('centerGameboards')
+    gameboard.classList.add('placingShips')
+  } else if (player === 'playerTwo') {
+    gameboard.classList.add('playerTwoGameNotStarted')
+  }
   
   for (let y = 0; y < 10; y++) {
     

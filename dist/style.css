@@ -15,17 +15,39 @@
   background-color: #5775B0;
 }
 
-.gameboard .position {
+.centerGameboards {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placingShips {
+  width: 500px;
+  height: 500px;
+}
+
+.playerTwoGameNotStarted {
+  display: none;
+}
+
+.position {
   border: 1px solid black;
 }
 
-.gameboard .position:hover {
-  cursor: crosshair;
+.position:hover {
+  cursor: pointer;
 }
+
 .miss {
   background-color: white;
 }
 
 .hit {
   background-color: rgb(255, 57, 57);
+}
+
+.invalidShipPlacement:hover {
+  cursor: not-allowed;
+  background-color: red;
 }
