@@ -1,26 +1,22 @@
 const validShipPlacement = (currentPlayerTurn, ship) => {
-  if (currentPlayerTurn.playerLabel === 'playerOne') {
-    const placedShips = currentPlayerTurn.getGameboard().getPlacedShips()
-    if (ship.getPositions().length === 0) {
-      return false
-    }
+  const placedShips = currentPlayerTurn.getGameboard().getPlacedShips()
+  if (ship.getPositions().length === 0) {
+    return false
+  }
 
-    if (ship.getAxis() === 'X') {
-      
-      for (let placedShip of placedShips) {
-        if (validateShipWithX(ship, placedShip) === false) {
-          return false
-        }
-      }
-    } else if (ship.getAxis() === 'Y') {
-      for (let placedShip of placedShips) {
-        if (validateShipWithY(ship, placedShip) === false) {
-          return false
-        }
+  if (ship.getAxis() === 'X') {
+    
+    for (let placedShip of placedShips) {
+      if (validateShipWithX(ship, placedShip) === false) {
+        return false
       }
     }
-  } else if (currentPlayerTurn === 'playerTwo') {
-
+  } else if (ship.getAxis() === 'Y') {
+    for (let placedShip of placedShips) {
+      if (validateShipWithY(ship, placedShip) === false) {
+        return false
+      }
+    }
   }
 
   return true

@@ -13,9 +13,9 @@ export const autoPlaceAllShips = (player, gameStarted, totalShips, axis) => {
 
   const gameboard = document.querySelector(`.${player.getPlayerLabel()}`)
 
-  console.log('hello player one')
+  console.log('hello player')
 
-  let numOfPlacedShips = player.getGameboard().getPlacedShips().length
+  let numOfPlacedShips = Object.values(player.getGameboard().getPlacedShips()).length
 
   while (numOfPlacedShips < totalShips) {
     const x = getRandomInt(0, 9)

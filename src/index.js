@@ -60,6 +60,8 @@ const startGame = () => {
     return
   }
 
+  handleComputerPlacement()
+
   const gameboards = document.querySelector('.gameboards')
   const gameboard = document.querySelector('.gameboard')
   const playerTwoGameboard = document.querySelector('.playerTwo')
@@ -92,7 +94,7 @@ export const placeShip = (elem, axis) => {
   if (axis === 'X') {
     if (validShipHover(shipLen, elem, axis, currentPlayerTurn)) {
       elem.classList.remove('invalidShipPlacement')
-      placeShipX(shipLen, elem)
+      placeShipX(shipLen, elem, currentPlayerTurn)
     } else {
       console.log('CHANGNG CURSOR')
       console.log(elem)
@@ -100,35 +102,50 @@ export const placeShip = (elem, axis) => {
     }
   } else if (axis === 'Y') {
     if (validShipHover(shipLen, elem, axis, currentPlayerTurn)) {
-      placeShipY(shipLen, elem)
+      placeShipY(shipLen, elem, currentPlayerTurn)
     }
   }
 }
 
-const placeShipX = (shipLen, elem) => {
+const placeShipX = (shipLen, elem, currentPlayerTurn) => {
   const [x, y] = [Number(elem.getAttribute('x')), Number(elem.getAttribute('y'))]
   const finalShipPositionX = (x + shipLen) - 1
+
+  console.log(elem)
 
   if (finalShipPositionX <= 9) {
 
     for(let i = x; i <= finalShipPositionX; i++) {
-      const elem = document.querySelectorAll(`[x="${i}"][y="${y}"]`)[0]
+      let playerNum = 0
+
+      if (currentPlayerTurn.getPlayerLabel() === 'playerTwo') {
+        playerNum = 1
+      }
+
+      const elem = document.querySelectorAll(`[x="${i}"][y="${y}"]`)[playerNum]
       hoveredElems.push(elem)
       elem.style.backgroundColor = 'white'
+
+      console.log('hello wrold')
+      console.log(document.querySelectorAll(`[x="${i}"][y="${y}"]`))
     }
 
   }
 }
 
-const placeShipY = (shipLen, pos) => {
+const placeShipY = (shipLen, pos, currentPlayerTurn) => {
   const [x, y] = [Number(pos.getAttribute('x')), Number(pos.getAttribute('y'))]
   const finalShipPositionY = (y + shipLen) - 1
 
   if (finalShipPositionY <= 9) {
-    console.log(x, y)
+    let playerNum = 0
+
+    if (currentPlayerTurn.getPlayerLabel() === 'playerTwo') {
+      playerNum = 1
+    }
 
     for(let i = y; i <= finalShipPositionY; i++) {
-      const elem = document.querySelectorAll(`[x="${x}"][y="${i}"]`)[0]
+      const elem = document.querySelectorAll(`[x="${x}"][y="${i}"]`)[playerNum]
       hoveredElems.push(elem)
       elem.style.backgroundColor = 'white'
     }
@@ -136,7 +153,7 @@ const placeShipY = (shipLen, pos) => {
 }
 
 const finalizeShipPlacement = () => {
-
+  // loop
   console.log('placing ship')
   console.log(gameStarted)
 
@@ -157,16 +174,22 @@ const finalizeShipPlacement = () => {
 
   if (validShipPlacement(currentPlayerTurn, ship)) {
     
-    playerOne.getGameboard().placeShip(ship)
+    currentPlayerTurn.getGameboard().placeShip(ship)
 
     hoveredElems = []
     currShipLengthIndex += 1
   }
 
-  console.log(playerOne.getGameboard().getPlacedShips())
+  console.log(currentPlayerTurn.getGameboard().getPlacedShips())
 }
 
-const handleAutoPlaceClick = () => {
+const handleComputerPlacement = () => {
+  currentPlayerTurn = playerTwo
+  handleAutoPlace()
+  currentPlayerTurn = playerOne
+}
+
+const handleAutoPlace = () => {
   clearGameboard(currentPlayerTurn)
   autoPlaceAllShips(currentPlayerTurn, gameStarted, totalShips, axis)
 }
@@ -191,13 +214,10 @@ const displayGameboard = (player) => {
       positionElem.setAttribute('x', x)
       positionElem.setAttribute('y', y)
       positionElem.classList.add('position')
+
+      positionElem.addEventListener('click', finalizeShipPlacement)
+      positionElem.addEventListener('mouseover', handleHoverPosition)
       
-      if (player === 'playerOne') {
-        positionElem.addEventListener('click', finalizeShipPlacement)
-        positionElem.addEventListener('mouseover', handleHoverPosition)
-      } else if (player === 'playerTwo') {
-        positionElem.addEventListener('click', attackPosition)
-      }
       gameboard.append(positionElem)
     }
   }
@@ -208,5 +228,5 @@ const displayGameboard = (player) => {
 displayGameboard(playerOne.playerLabel)
 displayGameboard(playerTwo.playerLabel)
 
-autoPlaceButton.addEventListener('click', handleAutoPlaceClick)
+autoPlaceButton.addEventListener('click', handleAutoPlace)
 startGameButton.addEventListener('click', startGame)
