@@ -35,12 +35,10 @@ const validateShipWithX = (ship, placedShip) => {
     
     if (shipStartPosY === placedStartPosY) {
       if (shipStartPosX >= placedStartPosX && shipStartPosX <= placedEndPosX) {
-        console.log('FALSE')
         return false
       }
 
       if (shipEndPosX >= placedStartPosX && shipEndPosX <= placedEndPosX) {
-        console.log('FALSE')
         return false
       }
     }
@@ -56,21 +54,14 @@ const validateShipWithY = (ship, placedShip) => {
   const { x: placedEndPosX, y: placedEndPosY } = placedShip.getLastPosition()
   
   if (shipStartPosX === placedStartPosX) {
-    console.log('checkign....')
-    console.log(`shipStartPosY: ${shipStartPosY}\nshipEndPosY: ${shipEndPosY}\nplacedStartPosY: ${placedStartPosY}`)
     
     if (shipStartPosY >= placedStartPosY && shipStartPosY <= placedEndPosY) {
-      console.log('1')
       return false
     }
     if (shipStartPosY >= placedStartPosY && shipStartPosY <= placedEndPosY) {
-      console.log('FALSE')
-      console.log('2')
       return false
     }
     if (shipEndPosY >= placedStartPosY && shipEndPosY <= placedEndPosY) {
-      console.log('FALSE')
-      console.log('3')
       return false
     }
   }

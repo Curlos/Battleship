@@ -5,10 +5,6 @@ const validShipHover = (shipLen, elem, axis, currentPlayerTurn) => {
   const hoveredPos = axis === 'X' ? getHoveredPosX(elem, shipLen) : getHoveredPosY(elem, shipLen)
   const ship = createShipWithPos(hoveredPos, axis)
 
-  console.log(`SHIP PLACEMENT VALID? ${validShipPlacement(currentPlayerTurn, ship)}`)
-  console.log(hoveredPos)
-  console.log(ship)
-
   return validShipPlacement(currentPlayerTurn, ship)
 }
 
