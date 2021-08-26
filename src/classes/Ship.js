@@ -42,8 +42,12 @@ class Ship {
   }
 
   hit(positionNum) {
-    const position = this.positions.find(position => position.x === positionNum[0] && position.y === position[1])
-    position.hit = true
+    console.log(positionNum)
+    console.log(this.positions)
+    const position = this.positions.find(position => Number(position[0].x) === Number(positionNum[0]) && Number(position[0].y) === Number(positionNum[1]))
+
+    console.log(position[0])
+    position[0].hit = true
   }
 
   isSunk() {

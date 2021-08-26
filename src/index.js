@@ -1,10 +1,9 @@
 import { Ship } from './classes/Ship'
-import { Gameboard } from './classes/Gameboard'
 import { Player } from './classes/Player'
 import validShipPlacement from './gameHelpers/validShipPlacement'
-import createShipWithPos from './gameHelpers/createShipWithPos'
 import validShipHover from './gameHelpers/validShipHover'
 import { autoPlaceAllShips } from './gameHelpers/autoPlaceAllShips'
+import { editBoardListeners } from './gameHelpers/editBoardListeners'
 
 const playerOne = new Player('Carlos', 'playerOne')
 const playerTwo = new Player('Anthony', 'playerTwo')
@@ -21,26 +20,22 @@ let currShipLengthIndex = 0
 let hoveredElems = []
 let hoveredPos = []
 
-const attackPosition = (event) => {
-  const pos = event.target
-  const [x, y] = [Number(pos.getAttribute('x')), Number(pos.getAttribute('y'))]
-
-
-  pos.classList.add('hit')
-
-  console.log(x, y)
-}
-
 
 const clearHoverElemColors = () => {
-  hoveredElems.forEach((elem) => elem.style.backgroundColor = '#5775B0')
+  hoveredElems.forEach((elem) => {
+    elem.classList.remove('placedPosition')
+    elem.classList.add('notHit')
+  })
   hoveredElems = []
   hoveredPos = []
 }
 
 const clearAllElemColors = (player) => {
   const allPos = document.querySelectorAll(`.${player.getPlayerLabel()} .position`)
-  allPos.forEach((elem) => elem.style.backgroundColor = '#5775B0')
+  allPos.forEach((elem) => {
+    elem.classList.add('notHit')
+    elem.classList.remove('invalidShipPlacement', 'placedPosition')
+  })
   hoveredElems = []
   hoveredPos = []
   currShipLengthIndex = 0
@@ -61,6 +56,7 @@ const startGame = () => {
   }
 
   handleComputerPlacement()
+  editBoardListeners(playerOne, playerTwo)
 
   const gameboards = document.querySelector('.gameboards')
   const gameboard = document.querySelector('.gameboard')
@@ -75,7 +71,7 @@ const startGame = () => {
 
 }
 
-const handleHoverPosition = (event) => {
+export const handleHoverPosition = (event) => {
   clearHoverElemColors()
   if(gameStarted === false) {
     const elem = event.target
@@ -94,7 +90,7 @@ export const placeShip = (elem, axis) => {
   if (axis === 'X') {
     if (validShipHover(shipLen, elem, axis, currentPlayerTurn)) {
       elem.classList.remove('invalidShipPlacement')
-      placeShipX(shipLen, elem, currentPlayerTurn)
+      placeShipX(shipLen, elem, currentPlayerTurn, currShipLengthIndex)
     } else {
       console.log('CHANGNG CURSOR')
       console.log(elem)
@@ -102,12 +98,12 @@ export const placeShip = (elem, axis) => {
     }
   } else if (axis === 'Y') {
     if (validShipHover(shipLen, elem, axis, currentPlayerTurn)) {
-      placeShipY(shipLen, elem, currentPlayerTurn)
+      placeShipY(shipLen, elem, currentPlayerTurn, currShipLengthIndex)
     }
   }
 }
 
-const placeShipX = (shipLen, elem, currentPlayerTurn) => {
+const placeShipX = (shipLen, elem, currentPlayerTurn, currShipLengthIndex) => {
   const [x, y] = [Number(elem.getAttribute('x')), Number(elem.getAttribute('y'))]
   const finalShipPositionX = (x + shipLen) - 1
 
@@ -124,7 +120,10 @@ const placeShipX = (shipLen, elem, currentPlayerTurn) => {
 
       const elem = document.querySelectorAll(`[x="${i}"][y="${y}"]`)[playerNum]
       hoveredElems.push(elem)
-      elem.style.backgroundColor = 'white'
+      elem.classList.add('placedPosition')
+      elem.classList.add(currentPlayerTurn.getPlayerLabel())
+      elem.setAttribute('ship-index', currShipLengthIndex)
+      elem.setAttribute('position-index', i)
 
       console.log('hello wrold')
       console.log(document.querySelectorAll(`[x="${i}"][y="${y}"]`))
@@ -133,7 +132,7 @@ const placeShipX = (shipLen, elem, currentPlayerTurn) => {
   }
 }
 
-const placeShipY = (shipLen, pos, currentPlayerTurn) => {
+const placeShipY = (shipLen, pos, currentPlayerTurn, currShipLengthIndex) => {
   const [x, y] = [Number(pos.getAttribute('x')), Number(pos.getAttribute('y'))]
   const finalShipPositionY = (y + shipLen) - 1
 
@@ -147,12 +146,14 @@ const placeShipY = (shipLen, pos, currentPlayerTurn) => {
     for(let i = y; i <= finalShipPositionY; i++) {
       const elem = document.querySelectorAll(`[x="${x}"][y="${i}"]`)[playerNum]
       hoveredElems.push(elem)
-      elem.style.backgroundColor = 'white'
+      elem.classList.add('placedPosition')
+      elem.classList.add(currentPlayerTurn.getPlayerLabel())
+      elem.setAttribute('shipIndex', currShipLengthIndex)
     }
   }
 }
 
-const finalizeShipPlacement = () => {
+export const finalizeShipPlacement = () => {
   // loop
   console.log('placing ship')
   console.log(gameStarted)
@@ -191,6 +192,7 @@ const handleComputerPlacement = () => {
 
 const handleAutoPlace = () => {
   clearGameboard(currentPlayerTurn)
+  clearAllElemColors(currentPlayerTurn)
   autoPlaceAllShips(currentPlayerTurn, gameStarted, totalShips, axis)
 }
 

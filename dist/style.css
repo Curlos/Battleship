@@ -43,11 +43,23 @@
   background-color: white;
 }
 
-.hit {
-  background-color: rgb(255, 57, 57);
+.notHit {
+  background-color: #5775B0;
 }
 
 .invalidShipPlacement:hover {
   cursor: not-allowed;
   background-color: red;
+}
+
+.placedPosition {
+  background-color: white;
+}
+
+.hit {
+  background-color: rgb(255, 57, 57);
+}
+
+.enemyPosition:hover {
+  background-color: rgb(255, 57, 57);
 }
