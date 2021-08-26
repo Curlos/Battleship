@@ -23,6 +23,10 @@ export class Player {
     return this.gameboard
   }
 
+  setWin() {
+    this.won = true
+  }
+
   hasWon() {
     return this.won
   }

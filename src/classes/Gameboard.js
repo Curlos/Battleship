@@ -1,6 +1,7 @@
 export class Gameboard {
   positions = [];
   placedShips = [];
+  sunkenShips = [];
 
   clearGameboard() {
     this.positions = []
@@ -15,7 +16,14 @@ export class Gameboard {
     this.placedShips.push(ship)
   }
 
-  receiveAttack(coords) {
+  receiveAttack(ship) {
+    if (ship.isSunk()) {
+      this.sunkenShips.push(ship)
+    }
+  }
 
+  allShipsSunken() {
+    console.log(this.sunkenShips)
+    return this.placedShips.length === this.sunkenShips.length
   }
 }

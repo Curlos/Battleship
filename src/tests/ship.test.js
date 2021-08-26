@@ -15,7 +15,12 @@ describe('Ship lengths', () => {
 describe('Get ship positions', () => {
   test('Get all of the ships positions', () => {
     const ship = new Ship(4)
-    const positions = [[0,1], [0,2], [0,3], [0,4]]
+    const positions = [
+      {x: 0, y: 1, hit: false},
+      {x: 0, y: 2, hit: false},
+      {x: 0, y: 3, hit: false},
+      {x: 0, y: 4, hit: false},
+    ]
     ship.setPositions(positions)
     
     expect(ship.getPositions()).toStrictEqual(positions)
@@ -23,20 +28,31 @@ describe('Get ship positions', () => {
 
   test('Place ship into a position where there is not enough space', () => {
     const ship = new Ship(4)
-    const positions = [[0,1], [0,2]]
+    const positions = [
+      {x: 0, y: 1, hit: false},
+      {x: 0, y: 2, hit: false},
+      {x: 0, y: 3, hit: false},
+      {x: 0, y: 4, hit: false},
+      {x: 0, y: 5, hit: false},
+    ]
     ship.setPositions(positions)
     
     expect(ship.setPositions(positions)).toBe('Ship cannot fit!')
-    expect(ship.getPositions()).toBe(undefined)
+    expect(ship.getPositions()).toStrictEqual([])
   })
-
 })
 
 describe('Ship hit', () => {
   test('Hit ship several times but enough to sink it', () => {
     const ship = new Ship(5)
-    const positionNums = [[0,1], [0,2], [0,3], [0,4]]
-    
+    const positionNums = [
+      {x: 0, y: 1, hit: false},
+      {x: 0, y: 2, hit: false},
+      {x: 0, y: 3, hit: false},
+      {x: 0, y: 4, hit: false},
+    ]
+    ship.setPositions(positionNums)
+
     positionNums.forEach((positionNum) => ship.hit(positionNum))
     expect(ship.getPositionsHit()).toStrictEqual([
       {x: 0, y: 1, hit: false},

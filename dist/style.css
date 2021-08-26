@@ -1,3 +1,10 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .gameboards {
   display: flex;
   justify-content: space-around;
@@ -39,27 +46,35 @@
   cursor: pointer;
 }
 
-.miss {
-  background-color: white;
-}
-
 .notHit {
   background-color: #5775B0;
 }
 
 .invalidShipPlacement:hover {
   cursor: not-allowed;
-  background-color: red;
+  background-color: #98253F;
 }
 
 .placedPosition {
-  background-color: white;
-}
-
-.hit {
-  background-color: rgb(255, 57, 57);
+  background-color: #87CEEB;
 }
 
 .enemyPosition:hover {
-  background-color: rgb(255, 57, 57);
+  background-color: rgb(50, 182, 61);
+}
+
+.hit {
+  background-color: red;
+}
+
+.hit:hover {
+  background-color: red;
+}
+
+.miss {
+  background-color: rgb(94, 94, 94);
+}
+
+.miss:hover {
+  background-color: rgb(94, 94, 94);
 }

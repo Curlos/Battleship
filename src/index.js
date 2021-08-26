@@ -8,7 +8,7 @@ import { editBoardListeners } from './gameHelpers/editBoardListeners'
 const playerOne = new Player('Carlos', 'playerOne')
 const playerTwo = new Player('Anthony', 'playerTwo')
 const axisOptions = ['X', 'Y']
-const axis = 'X'
+const axis = 'Y'
 const shipLengths = [5, 4, 3, 3, 2]
 const autoPlaceButton = document.querySelector('.autoPlaceButton')
 const startGameButton = document.querySelector('.startGameButton')
@@ -92,13 +92,14 @@ export const placeShip = (elem, axis) => {
       elem.classList.remove('invalidShipPlacement')
       placeShipX(shipLen, elem, currentPlayerTurn, currShipLengthIndex)
     } else {
-      console.log('CHANGNG CURSOR')
-      console.log(elem)
       elem.classList.add('invalidShipPlacement')
     }
   } else if (axis === 'Y') {
     if (validShipHover(shipLen, elem, axis, currentPlayerTurn)) {
+      elem.classList.remove('invalidShipPlacement')
       placeShipY(shipLen, elem, currentPlayerTurn, currShipLengthIndex)
+    } else {
+      elem.classList.add('invalidShipPlacement')
     }
   }
 }
@@ -106,8 +107,6 @@ export const placeShip = (elem, axis) => {
 const placeShipX = (shipLen, elem, currentPlayerTurn, currShipLengthIndex) => {
   const [x, y] = [Number(elem.getAttribute('x')), Number(elem.getAttribute('y'))]
   const finalShipPositionX = (x + shipLen) - 1
-
-  console.log(elem)
 
   if (finalShipPositionX <= 9) {
 
@@ -124,9 +123,6 @@ const placeShipX = (shipLen, elem, currentPlayerTurn, currShipLengthIndex) => {
       elem.classList.add(currentPlayerTurn.getPlayerLabel())
       elem.setAttribute('ship-index', currShipLengthIndex)
       elem.setAttribute('position-index', i)
-
-      console.log('hello wrold')
-      console.log(document.querySelectorAll(`[x="${i}"][y="${y}"]`))
     }
 
   }
@@ -148,7 +144,8 @@ const placeShipY = (shipLen, pos, currentPlayerTurn, currShipLengthIndex) => {
       hoveredElems.push(elem)
       elem.classList.add('placedPosition')
       elem.classList.add(currentPlayerTurn.getPlayerLabel())
-      elem.setAttribute('shipIndex', currShipLengthIndex)
+      elem.setAttribute('ship-index', currShipLengthIndex)
+      elem.setAttribute('position-index', i)
     }
   }
 }
@@ -180,8 +177,6 @@ export const finalizeShipPlacement = () => {
     hoveredElems = []
     currShipLengthIndex += 1
   }
-
-  console.log(currentPlayerTurn.getGameboard().getPlacedShips())
 }
 
 const handleComputerPlacement = () => {
@@ -193,7 +188,7 @@ const handleComputerPlacement = () => {
 const handleAutoPlace = () => {
   clearGameboard(currentPlayerTurn)
   clearAllElemColors(currentPlayerTurn)
-  autoPlaceAllShips(currentPlayerTurn, gameStarted, totalShips, axis)
+  autoPlaceAllShips(currentPlayerTurn, gameStarted, totalShips, axisOptions)
 }
 
 

@@ -37,7 +37,16 @@ const validateShipWithX = (ship, placedShip) => {
       if (shipEndPosX >= placedStartPosX && shipEndPosX <= placedEndPosX) {
         return false
       }
+
+      if (Math.abs(placedEndPosX - shipStartPosX) === 1) {
+        return false
+      }
     }
+
+    if (Math.abs(shipStartPosY - placedStartPosY) === 1 || Math.abs(shipEndPosY - placedStartPosY) === 1) {
+      return false
+    }
+
   }
 
   return true
@@ -60,6 +69,18 @@ const validateShipWithY = (ship, placedShip) => {
     if (shipEndPosY >= placedStartPosY && shipEndPosY <= placedEndPosY) {
       return false
     }
+
+    if (Math.abs(placedEndPosY - shipStartPosY) === 1) {
+      return false
+    }
+
+    if (Math.abs(placedStartPosY - shipEndPosY) === 1) {
+      return false
+    }
+  }
+
+  if (Math.abs(shipStartPosX - placedStartPosX) === 1 || Math.abs(shipEndPosX - placedStartPosX) === 1) {
+    return false
   }
 
   return true

@@ -6,7 +6,6 @@ class Ship {
   constructor(length, axis) {
     this.length = length
     this.axis = axis
-    this.positionsHit = []
   }
 
   getLength() {
@@ -51,8 +50,9 @@ class Ship {
   }
 
   isSunk() {
-    const positionsLeft = this.positions.filter((position) => position.hit != true)
-    return positionsLeft === 0
+    const positionsLeft = this.positions.filter((position) => position[0].hit === false)
+    console.log(`Positions Left: ${positionsLeft}`)
+    return positionsLeft.length === 0
   }
 }
 

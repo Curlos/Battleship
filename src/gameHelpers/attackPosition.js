@@ -30,28 +30,34 @@ export const attackPosition = (elem, attackedPlayer) => {
       const ship = attackedPlayerShips[shipIndex]
 
       ship.hit([x, y])
+      console.log(attackedPlayer.getGameboard())
+      attackedPlayer.getGameboard().receiveAttack(ship)
 
 
       console.log(ship)
       
       if (ship.isSunk()) {
-        sunkShip()
+        sunkShip(attackedPlayer)
       }
-    }
 
-    elem.classList.remove()
+      if (attackedPlayer.getGameboard().allShipsSunken()) {
+        console.log('GAME OVER BOYS')
+      }
+    } else {
+      elem.classList.remove('notHit')
+      elem.classList.add('miss')
+    }
   }
+
+  elem.classList.add('invalidShipPlacement')
 
   console.log(x, y)
 }
 
-const sunkShip = () => {
+export const sunkShip = (attackedPlayer) => {
   // reveal the ship position and picture of the silhouette
   // also add fade out the ship on the board
 
   console.log('SHIP HAS BEEN SUNK! MAYDAY! MAYDAY!')
-}
-
-const allShipsSunk = () => {
-
+  attackedPlayer.getGameboard().allShipsSunken()
 }
